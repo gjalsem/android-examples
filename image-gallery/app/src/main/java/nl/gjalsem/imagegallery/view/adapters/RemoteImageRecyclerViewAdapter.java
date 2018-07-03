@@ -137,7 +137,7 @@ public class RemoteImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     @Override
     public int getItemViewType(int position) {
-        return position == getItemCount() - 1 ? VIEW_TYPE_FOOTER : VIEW_TYPE_IMAGE;
+        return loading && position == getItemCount() - 1 ? VIEW_TYPE_FOOTER : VIEW_TYPE_IMAGE;
     }
 
     @Override
