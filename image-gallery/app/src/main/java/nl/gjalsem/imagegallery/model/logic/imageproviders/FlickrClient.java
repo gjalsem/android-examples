@@ -44,7 +44,7 @@ public class FlickrClient implements RemoteImagesFetcher.RemoteImagesProvider {
     }
 
     @Override
-    public void fetchImages(int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    public void fetchImages(int page, RemoteImagesFetcher.ProviderCallback callback) {
         if (TextUtils.isEmpty(API_KEY)) {
             callback.onError("Please set FlickrClient.API_KEY to try out this app.");
             return;

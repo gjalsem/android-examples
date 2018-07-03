@@ -72,7 +72,7 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
     }
 
     @Override
-    public void fetchImages(int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    public void fetchImages(int page, RemoteImagesFetcher.ProviderCallback callback) {
         if (TextUtils.isEmpty(API_KEY)) {
             callback.onError("Please set TheMovieDbClient.API_KEY to try out this app.");
         } else if (config == null) {
@@ -88,7 +88,7 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
         requestQueue.cancelAll(REQUEST_TAG);
     }
 
-    private void onCachedConfigLoaded(byte[] data, int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private void onCachedConfigLoaded(byte[] data, int page, RemoteImagesFetcher.ProviderCallback callback) {
         if (data == null) {
             requestConfig(page, callback);
             return;
@@ -108,7 +108,7 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
         requestImages(page, callback);
     }
 
-    private void requestConfig(int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private void requestConfig(int page, RemoteImagesFetcher.ProviderCallback callback) {
         Request<?> request = new JsonObjectRequest(END_POINT + CONFIGURATION_PATH, null,
                 response -> onConfigResponse(response, page, callback),
                 error -> onVolleyError(error, callback)).setTag(REQUEST_TAG);
@@ -119,7 +119,7 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
         requestQueue.add(request);
     }
 
-    private void onConfigResponse(JSONObject response, int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private void onConfigResponse(JSONObject response, int page, RemoteImagesFetcher.ProviderCallback callback) {
         String configString;
         try {
             JSONObject configJson = response.getJSONObject("images");
@@ -135,14 +135,14 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
                 () -> requestImages(page, callback));
     }
 
-    private void requestImages(int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private void requestImages(int page, RemoteImagesFetcher.ProviderCallback callback) {
         String url = String.format(Locale.US, END_POINT + POPULAR_MOVIES_PATH, page);
         requestQueue.add(new JsonObjectRequest(url, null,
                 response -> onImagesResponse(response, page, callback),
                 error -> onVolleyError(error, callback)).setTag(REQUEST_TAG));
     }
 
-    private void onImagesResponse(JSONObject response, int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private void onImagesResponse(JSONObject response, int page, RemoteImagesFetcher.ProviderCallback callback) {
         int totalPages;
         List<RemoteImage> images;
         try {
@@ -173,7 +173,7 @@ public class TheMovieDbClient implements RemoteImagesFetcher.RemoteImagesProvide
         return Collections.unmodifiableList(images);
     }
 
-    private static void onVolleyError(VolleyError error, RemoteImagesFetcher.RemoteImagesCallback callback) {
+    private static void onVolleyError(VolleyError error, RemoteImagesFetcher.ProviderCallback callback) {
         Log.e(TAG, ERROR_MESSAGE, error);
         callback.onError(ERROR_MESSAGE);
     }

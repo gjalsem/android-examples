@@ -7,56 +7,58 @@ import java.util.List;
 import nl.gjalsem.imagegallery.model.data.RemoteImage;
 
 /**
- * Fetches lists of remote image URLs by calling a RemoteImagesProvider implementation. Keeps track
- * of pagination and when to stop fetching.
+ * Fetches lists of remote image URLs by calling a RemoteImagesProvider implementation.
  */
 public class RemoteImagesFetcher {
+    public static final int NO_NEXT_PAGE = -1;
+
     public interface RemoteImagesCallback {
+        void onSuccess(List<RemoteImage> images, int nextPage);
+
+        void onError(String msg);
+    }
+
+    public interface ProviderCallback {
         void onSuccess(List<RemoteImage> images, boolean endOfList);
 
         void onError(String msg);
     }
 
     public interface RemoteImagesProvider {
-        void fetchImages(int page, RemoteImagesCallback callback);
+        void fetchImages(int page, ProviderCallback callback);
 
         void cancel();
     }
 
     private final RemoteImagesProvider remoteImagesProvider;
 
-    private int page = 1;
-    private boolean stopFetching;
     private boolean fetching;
 
     public RemoteImagesFetcher(RemoteImagesProvider remoteImagesProvider) {
         this.remoteImagesProvider = remoteImagesProvider;
     }
 
-    public void updateImages(List<RemoteImage> originalImages, RemoteImagesCallback callback) {
-        if (fetching || stopFetching) {
+    public void updateImages(int page, List<RemoteImage> originalImages, RemoteImagesCallback callback) {
+        if (fetching) {
             return;
         }
 
         fetching = true;
-        remoteImagesProvider.fetchImages(page, new RemoteImagesCallback() {
+        remoteImagesProvider.fetchImages(page, new ProviderCallback() {
             @Override
             public void onSuccess(List<RemoteImage> images, boolean endOfList) {
                 fetching = false;
-                page++;
 
-                if (endOfList) {
-                    stopFetching = true;
-                }
+                int nextPage = endOfList ? NO_NEXT_PAGE : page + 1;
 
                 if (originalImages == null) {
-                    callback.onSuccess(images, endOfList);
+                    callback.onSuccess(images, nextPage);
                 } else {
                     List<RemoteImage> updatedImages = append(originalImages, images);
-                    if (updatedImages.size() == originalImages.size()) {
-                        updateImages(originalImages, callback);
+                    if (!endOfList && updatedImages.size() == originalImages.size()) {
+                        updateImages(nextPage, originalImages, callback);
                     } else {
-                        callback.onSuccess(updatedImages, endOfList);
+                        callback.onSuccess(updatedImages, nextPage);
                     }
                 }
             }

@@ -19,6 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doAnswer;
 
 /**
@@ -36,17 +37,18 @@ public class MainViewModelTest {
     @Before
     public void setup() {
         doAnswer(invocation -> {
-            List<RemoteImage> images = invocation.getArgument(0);
-            RemoteImagesFetcher.RemoteImagesCallback callback = invocation.getArgument(1);
+            int page = invocation.getArgument(0);
+            List<RemoteImage> images = invocation.getArgument(1);
+            RemoteImagesFetcher.RemoteImagesCallback callback = invocation.getArgument(2);
 
             List<RemoteImage> result = images == null ? new ArrayList<>() : new ArrayList<>(images);
             for (int i = 0; i < 20; i++) {
                 result.add(new RemoteImage(null, null));
             }
 
-            callback.onSuccess(result, false);
+            callback.onSuccess(result, page + 1);
             return null;
-        }).when(remoteImagesFetcher).updateImages(any(), any());
+        }).when(remoteImagesFetcher).updateImages(anyInt(), any(), any());
     }
 
     @Test

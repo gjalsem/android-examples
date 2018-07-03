@@ -20,7 +20,8 @@ public class MainViewModel extends ViewModel {
     private final RemoteImagesFetcher remoteImagesFetcher;
     private final ImageLoader imageLoader;
     private final NonNullMutableLiveData<MainViewState> state = new NonNullMutableLiveData<>(
-            new MainViewState.Builder().setSelectedImagePosition(POSITION_NONE).build());
+            new MainViewState.Builder().setNextPage(1).setSelectedImagePosition(
+                    POSITION_NONE).build());
 
     MainViewModel(RemoteImagesFetcher remoteImagesFetcher, ImageLoader imageLoader) {
         this.remoteImagesFetcher = remoteImagesFetcher;
@@ -75,14 +76,22 @@ public class MainViewModel extends ViewModel {
     }
 
     private void fetchMoreImages() {
+        if (state.getValue().getNextPage() == RemoteImagesFetcher.NO_NEXT_PAGE) {
+            return;
+        }
+
         state.setValue(state.getValue().toBuilder().setLoading(true).build());
 
-        remoteImagesFetcher.updateImages(state.getValue().getRemoteImages(),
-                new RemoteImagesFetcher.RemoteImagesCallback() {
+        remoteImagesFetcher.updateImages(state.getValue().getNextPage(),
+                state.getValue().getRemoteImages(), new RemoteImagesFetcher.RemoteImagesCallback() {
                     @Override
-                    public void onSuccess(List<RemoteImage> images, boolean endOfList) {
+                    public void onSuccess(List<RemoteImage> images, int nextPage) {
+                        // If this wasn't the last page, it looks better to keep showing the loading
+                        // view, instead of waiting for the next call to fetchMoreImages().
+                        boolean loading = nextPage != RemoteImagesFetcher.NO_NEXT_PAGE;
+
                         state.setValue(state.getValue().toBuilder().setRemoteImages(
-                                images).setLoading(!endOfList).build());
+                                images).setNextPage(nextPage).setLoading(loading).build());
                     }
 
                     @Override

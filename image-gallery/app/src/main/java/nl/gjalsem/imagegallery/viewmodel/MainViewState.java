@@ -16,6 +16,7 @@ public class MainViewState implements Parcelable {
     public static class Builder {
         private List<RemoteImage> remoteImages;
         private boolean loading;
+        private int nextPage;
         private String error;
         private int selectedImagePosition;
 
@@ -26,6 +27,7 @@ public class MainViewState implements Parcelable {
         private Builder(MainViewState instance) {
             remoteImages = instance.remoteImages;
             loading = instance.loading;
+            nextPage = instance.nextPage;
             error = instance.error;
             selectedImagePosition = instance.selectedImagePosition;
         }
@@ -37,6 +39,11 @@ public class MainViewState implements Parcelable {
 
         public Builder setLoading(boolean loading) {
             this.loading = loading;
+            return this;
+        }
+
+        public Builder setNextPage(int nextPage) {
+            this.nextPage = nextPage;
             return this;
         }
 
@@ -57,12 +64,14 @@ public class MainViewState implements Parcelable {
 
     private final List<RemoteImage> remoteImages;
     private final boolean loading;
+    private final int nextPage;
     private final String error;
     private final int selectedImagePosition;
 
     private MainViewState(Builder builder) {
         remoteImages = builder.remoteImages;
         loading = builder.loading;
+        nextPage = builder.nextPage;
         error = builder.error;
         selectedImagePosition = builder.selectedImagePosition;
     }
@@ -70,6 +79,7 @@ public class MainViewState implements Parcelable {
     private MainViewState(Parcel in) {
         remoteImages = in.createTypedArrayList(RemoteImage.CREATOR);
         loading = in.readByte() != 0;
+        nextPage = in.readInt();
         error = in.readString();
         selectedImagePosition = in.readInt();
     }
@@ -87,6 +97,10 @@ public class MainViewState implements Parcelable {
         return loading;
     }
 
+    public int getNextPage() {
+        return nextPage;
+    }
+
     public String getError() {
         return error;
     }
@@ -99,6 +113,7 @@ public class MainViewState implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(remoteImages);
         dest.writeByte((byte) (loading ? 1 : 0));
+        dest.writeInt(nextPage);
         dest.writeString(error);
         dest.writeInt(selectedImagePosition);
     }

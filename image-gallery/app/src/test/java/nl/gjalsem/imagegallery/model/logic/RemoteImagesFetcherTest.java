@@ -13,10 +13,10 @@ public class RemoteImagesFetcherTest {
     private static class MockImagesProvider implements RemoteImagesFetcher.RemoteImagesProvider {
         private int fetchCalled;
         private int cancelCalled;
-        private RemoteImagesFetcher.RemoteImagesCallback callback;
+        private RemoteImagesFetcher.ProviderCallback callback;
 
         @Override
-        public void fetchImages(int page, RemoteImagesFetcher.RemoteImagesCallback callback) {
+        public void fetchImages(int page, RemoteImagesFetcher.ProviderCallback callback) {
             fetchCalled++;
             this.callback = callback;
         }
@@ -33,7 +33,7 @@ public class RemoteImagesFetcherTest {
 
     private static class MockImagesCallback implements RemoteImagesFetcher.RemoteImagesCallback {
         @Override
-        public void onSuccess(List<RemoteImage> images, boolean endOfList) {
+        public void onSuccess(List<RemoteImage> images, int nextPage) {
         }
 
         @Override
@@ -45,12 +45,12 @@ public class RemoteImagesFetcherTest {
     public void fetchImages() {
         MockImagesProvider mockImagesProvider = new MockImagesProvider();
         RemoteImagesFetcher fetcher = new RemoteImagesFetcher(mockImagesProvider);
-        fetcher.updateImages(null, new MockImagesCallback());
-        fetcher.updateImages(null, new MockImagesCallback());
+        fetcher.updateImages(1, null, new MockImagesCallback());
+        fetcher.updateImages(1, null, new MockImagesCallback());
         assertThat(mockImagesProvider.fetchCalled, is(1));
         assertThat(mockImagesProvider.cancelCalled, is(0));
         mockImagesProvider.mockDoneFetching();
-        fetcher.updateImages(null, new MockImagesCallback());
+        fetcher.updateImages(1, null, new MockImagesCallback());
         assertThat(mockImagesProvider.fetchCalled, is(2));
         assertThat(mockImagesProvider.cancelCalled, is(0));
         fetcher.cancel();
