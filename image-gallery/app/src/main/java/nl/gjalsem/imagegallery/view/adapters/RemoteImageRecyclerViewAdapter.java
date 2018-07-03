@@ -18,8 +18,7 @@ import nl.gjalsem.imagegallery.model.data.RemoteImage;
 import nl.gjalsem.imagegallery.view.views.NetworkImageView;
 
 /**
- * A RecyclerView Adapter which shows a grid of thumbnails from a list or RemoteImages. It shows a
- * loading view on the bottom of the grid.
+ * A RecyclerView Adapter which shows RemoteImages, with a loading view at the end.
  */
 public class RemoteImageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public interface UrlProvider {
@@ -30,10 +29,10 @@ public class RemoteImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         void onItemClicked(int position);
     }
 
-    private class GridViewHolder extends RecyclerView.ViewHolder {
+    private class ImageViewHolder extends RecyclerView.ViewHolder {
         private final NetworkImageView imageView;
 
-        private GridViewHolder(LayoutInflater inflater, ViewGroup parent) {
+        private ImageViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(imageViewId, parent, false));
 
             Context context = parent.getContext();
@@ -116,13 +115,13 @@ public class RemoteImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         return viewType == VIEW_TYPE_FOOTER ? new FooterViewHolder(inflater,
-                parent) : new GridViewHolder(inflater, parent);
+                parent) : new ImageViewHolder(inflater, parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (maxImageWidth > 0 && maxImageHeight > 0 && holder instanceof GridViewHolder) {
-            NetworkImageView imageView = ((GridViewHolder) holder).imageView;
+        if (maxImageWidth > 0 && maxImageHeight > 0 && holder instanceof ImageViewHolder) {
+            NetworkImageView imageView = ((ImageViewHolder) holder).imageView;
             imageView.loadImage(
                     remoteImages.isEmpty() ? null : urlProvider.getUrl(remoteImages.get(position)),
                     imageLoader, maxImageWidth, maxImageHeight);
@@ -131,8 +130,8 @@ public class RemoteImageRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof GridViewHolder) {
-            ((GridViewHolder) holder).imageView.clear();
+        if (holder instanceof ImageViewHolder) {
+            ((ImageViewHolder) holder).imageView.clear();
         }
     }
 
