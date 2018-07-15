@@ -6,7 +6,9 @@ import android.view.ViewGroup
 import com.android.volley.toolbox.ImageLoader
 import nl.gjalsem.basickotlinexample.model.InfoItem
 
-class InfoItemAdapter(val imageLoader: ImageLoader) : RecyclerView.Adapter<InfoItemViewHolder>() {
+class InfoItemAdapter(private val imageLoader: ImageLoader)
+    : RecyclerView.Adapter<InfoItemViewHolder>() {
+
     var items: List<InfoItem> = listOf()
         set(value) {
             val oldSize = field.size

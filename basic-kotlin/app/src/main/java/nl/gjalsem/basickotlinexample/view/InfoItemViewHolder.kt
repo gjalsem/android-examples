@@ -8,7 +8,10 @@ import kotlinx.android.synthetic.main.info_item.view.*
 import nl.gjalsem.basickotlinexample.R
 import nl.gjalsem.basickotlinexample.model.InfoItem
 
-class InfoItemViewHolder(inflater: LayoutInflater, parent: ViewGroup, val imageLoader: ImageLoader)
+class InfoItemViewHolder(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        private val imageLoader: ImageLoader)
     : RecyclerView.ViewHolder(inflater.inflate(R.layout.info_item, parent, false)) {
 
     fun bind(infoItem: InfoItem) {
@@ -22,7 +25,7 @@ class InfoItemViewHolder(inflater: LayoutInflater, parent: ViewGroup, val imageL
         val builder = StringBuilder()
         builder.append(infoItem.city)
         if (builder.isNotEmpty()) {
-            builder.append(", ");
+            builder.append(", ")
         }
         builder.append(infoItem.state)
         return if (builder.isEmpty()) "Unknown location" else builder.toString()

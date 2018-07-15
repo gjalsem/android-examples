@@ -8,7 +8,7 @@ import com.android.volley.toolbox.Volley
 import nl.gjalsem.basickotlinexample.model.BitmapCache
 import nl.gjalsem.basickotlinexample.model.RpcClient
 
-class MainViewModelFactory(val context: Context) : ViewModelProvider.Factory {
+class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val requestQueue = Volley.newRequestQueue(context)
