@@ -41,7 +41,12 @@ class RpcClient(val requestQueue: RequestQueue) {
         val data = jsonObject.getJSONArray("data")
         for (i in 0 until data.length()) {
             val jsonItem = data.getJSONObject(i)
-            result.add(InfoItem(jsonItem.getString("name")))
+            val jsonVenue = jsonItem.getJSONObject("venue")
+            result.add(InfoItem(
+                    name = jsonItem.getString("name"),
+                    city = jsonVenue.optString("city"),
+                    state = jsonVenue.optString("state"),
+                    endDate = jsonItem.getString("endDate")))
         }
 
         return result

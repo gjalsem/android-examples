@@ -11,5 +11,17 @@ class InfoItemViewHolder(inflater: LayoutInflater, parent: ViewGroup)
     : RecyclerView.ViewHolder(inflater.inflate(R.layout.info_item, parent, false)) {
     fun bind(infoItem: InfoItem) {
         itemView.nameView.text = infoItem.name
+        itemView.locationView.text = getLocation(infoItem)
+        itemView.dateView.text = infoItem.endDate
+    }
+
+    private fun getLocation(infoItem: InfoItem): String {
+        val builder = StringBuilder()
+        builder.append(infoItem.city)
+        if (builder.isNotEmpty()) {
+            builder.append(", ");
+        }
+        builder.append(infoItem.state)
+        return if (builder.isEmpty()) "Unknown location" else builder.toString()
     }
 }
