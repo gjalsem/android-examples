@@ -1,7 +1,6 @@
 package nl.gjalsem.basickotlinexample.view
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.android.volley.toolbox.ImageLoader
 import nl.gjalsem.basickotlinexample.model.InfoItem
@@ -25,7 +24,7 @@ class InfoItemAdapter(private val imageLoader: ImageLoader)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoItemViewHolder {
-        return InfoItemViewHolder(LayoutInflater.from(parent.context), parent, imageLoader)
+        return InfoItemViewHolder(parent, imageLoader)
     }
 
     override fun onBindViewHolder(holder: InfoItemViewHolder, position: Int) {

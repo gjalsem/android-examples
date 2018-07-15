@@ -11,11 +11,11 @@ import nl.gjalsem.basickotlinexample.model.InfoItem
 /**
  * Binds an InfoItem object to the info_item layout.
  */
-class InfoItemViewHolder(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        private val imageLoader: ImageLoader)
-    : RecyclerView.ViewHolder(inflater.inflate(R.layout.info_item, parent, false)) {
+class InfoItemViewHolder(parent: ViewGroup, private val imageLoader: ImageLoader)
+    : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.info_item, parent, false)) {
+
+    private val context = parent.context
 
     fun bind(infoItem: InfoItem) {
         itemView.imageView.setImageUrl(infoItem.iconUrl, imageLoader)
@@ -31,6 +31,10 @@ class InfoItemViewHolder(
             builder.append(", ")
         }
         builder.append(infoItem.state)
-        return if (builder.isEmpty()) "Unknown location" else builder.toString()
+
+        return if (builder.isEmpty())
+            context.getString(R.string.unknown_location)
+        else
+            builder.toString()
     }
 }

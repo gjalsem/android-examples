@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Basic Kotlin Example</string>
     <string name="loading_error">Error loading data, please check your internet connection</string>
+    <string name="unknown_location">Unknown location</string>
 </resources>
