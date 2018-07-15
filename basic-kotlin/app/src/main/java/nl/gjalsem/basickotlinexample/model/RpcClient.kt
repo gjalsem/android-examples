@@ -7,34 +7,32 @@ import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONException
 import org.json.JSONObject
 
+const val TAG = "RpcClient"
 const val URL = "https://guidebook.com/service/v2/upcomingGuides/"
 
-class RpcClient(val requestQueue: RequestQueue) {
-    val tag = javaClass.simpleName
-    val requestTag = javaClass.name
-
+class RpcClient(private val requestQueue: RequestQueue) {
     fun fetch(callback: (MainState) -> Unit) {
         requestQueue.add(JsonObjectRequest(URL, null,
                 Response.Listener { response ->
                     try {
                         callback(MainState(getInfoItems(response), LoadingState.DONE))
                     } catch (e: JSONException) {
-                        Log.w(tag, e)
+                        Log.w(TAG, e)
                         callback(MainState(listOf(), LoadingState.ERROR))
                     }
                 },
                 Response.ErrorListener { error ->
-                    Log.w(tag, error)
+                    Log.w(TAG, error)
                     callback(MainState(listOf(), LoadingState.ERROR))
-                }).setTag(requestTag))
+                }).setTag(TAG))
     }
 
     fun cancel() {
-        requestQueue.cancelAll(requestTag)
+        requestQueue.cancelAll(TAG)
     }
 
     private fun getInfoItems(jsonObject: JSONObject): List<InfoItem> {
-        Log.d(tag, "Retrieved JSON: ${jsonObject.toString(2)}")
+        Log.d(TAG, "Retrieved JSON: ${jsonObject.toString(2)}")
 
         val result = mutableListOf<InfoItem>()
 
@@ -46,7 +44,8 @@ class RpcClient(val requestQueue: RequestQueue) {
                     name = jsonItem.getString("name"),
                     city = jsonVenue.optString("city"),
                     state = jsonVenue.optString("state"),
-                    endDate = jsonItem.getString("endDate")))
+                    endDate = jsonItem.getString("endDate"),
+                    iconUrl = jsonItem.getString("icon")))
         }
 
         return result

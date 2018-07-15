@@ -2,11 +2,12 @@ package nl.gjalsem.basickotlinexample.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import com.android.volley.toolbox.ImageLoader
 import nl.gjalsem.basickotlinexample.model.LoadingState
 import nl.gjalsem.basickotlinexample.model.MainState
 import nl.gjalsem.basickotlinexample.model.RpcClient
 
-class MainViewModel(val rpcClient: RpcClient) : ViewModel() {
+class MainViewModel(private val rpcClient: RpcClient, val imageLoader: ImageLoader) : ViewModel() {
     val stateData = MutableLiveData<MainState>()
 
     init {

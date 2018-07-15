@@ -13,21 +13,21 @@ import nl.gjalsem.basickotlinexample.viewmodel.MainViewModel
 import nl.gjalsem.basickotlinexample.viewmodel.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mainViewModel: MainViewModel
-
-    private val adapter = InfoItemAdapter()
+    private lateinit var viewModel: MainViewModel
+    private lateinit var adapter: InfoItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        recyclerView.adapter = adapter
-
-        mainViewModel = ViewModelProviders.of(this, MainViewModelFactory(this))
+        viewModel = ViewModelProviders.of(this, MainViewModelFactory(this))
                 .get(MainViewModel::class.java)
 
-        mainViewModel.stateData.observe(this, Observer { state -> state?.let { update(it) } })
+        adapter = InfoItemAdapter(viewModel.imageLoader)
+        recyclerView.adapter = adapter
+
+        viewModel.stateData.observe(this, Observer { state -> state?.let { update(it) } })
     }
 
     private fun update(state: MainState) {
