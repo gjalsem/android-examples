@@ -8,6 +8,9 @@ import com.android.volley.toolbox.Volley
 import nl.gjalsem.basickotlinexample.model.BitmapCache
 import nl.gjalsem.basickotlinexample.model.RpcClient
 
+/**
+ * Creates an instance of MainViewModel and all classes it depends on.
+ */
 class MainViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

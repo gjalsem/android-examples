@@ -8,6 +8,9 @@ import kotlinx.android.synthetic.main.info_item.view.*
 import nl.gjalsem.basickotlinexample.R
 import nl.gjalsem.basickotlinexample.model.InfoItem
 
+/**
+ * Binds an InfoItem object to the info_item layout.
+ */
 class InfoItemViewHolder(
         inflater: LayoutInflater,
         parent: ViewGroup,

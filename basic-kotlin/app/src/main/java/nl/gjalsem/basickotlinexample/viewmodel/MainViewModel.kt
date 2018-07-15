@@ -7,6 +7,9 @@ import nl.gjalsem.basickotlinexample.model.LoadingState
 import nl.gjalsem.basickotlinexample.model.MainState
 import nl.gjalsem.basickotlinexample.model.RpcClient
 
+/**
+ * Handles the app's state and triggers data fetching.
+ */
 class MainViewModel(private val rpcClient: RpcClient, val imageLoader: ImageLoader) : ViewModel() {
     val stateData = MutableLiveData<MainState>()
 

@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import com.android.volley.toolbox.ImageLoader
 import nl.gjalsem.basickotlinexample.model.InfoItem
 
+/**
+ * RecyclerView adapter for showing InfoItems using InfoItemViewHolder.
+ */
 class InfoItemAdapter(private val imageLoader: ImageLoader)
     : RecyclerView.Adapter<InfoItemViewHolder>() {
 

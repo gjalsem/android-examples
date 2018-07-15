@@ -10,6 +10,9 @@ import org.json.JSONObject
 const val TAG = "RpcClient"
 const val URL = "https://guidebook.com/service/v2/upcomingGuides/"
 
+/**
+ * Fetches data over the network.
+ */
 class RpcClient(private val requestQueue: RequestQueue) {
     fun fetch(callback: (MainState) -> Unit) {
         requestQueue.add(JsonObjectRequest(URL, null,

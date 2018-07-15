@@ -12,6 +12,9 @@ import nl.gjalsem.basickotlinexample.model.MainState
 import nl.gjalsem.basickotlinexample.viewmodel.MainViewModel
 import nl.gjalsem.basickotlinexample.viewmodel.MainViewModelFactory
 
+/**
+ * The app's main activity showing the list of fetched data.
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: InfoItemAdapter
