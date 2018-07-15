@@ -8,8 +8,10 @@ import nl.gjalsem.basickotlinexample.model.InfoItem
 class InfoItemAdapter : RecyclerView.Adapter<InfoItemViewHolder>() {
     var items: List<InfoItem> = listOf()
         set(value) {
+            val oldSize = field.size
             field = value
-            notifyDataSetChanged()
+            // We assume the list will only grow, so we get a nice animation when items are added.
+            notifyItemRangeInserted(oldSize, field.size - oldSize)
         }
 
     override fun getItemCount(): Int {
