@@ -7,13 +7,15 @@ import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONException
 import org.json.JSONObject
 
-const val TAG = "RpcClient"
-const val URL = "https://guidebook.com/service/v2/upcomingGuides/"
-
 /**
  * Fetches data over the network.
  */
 class RpcClient(private val requestQueue: RequestQueue) {
+    companion object {
+        private const val TAG = "RpcClient"
+        private const val URL = "https://guidebook.com/service/v2/upcomingGuides/"
+    }
+
     fun fetch(callback: (MainState) -> Unit) {
         requestQueue.add(JsonObjectRequest(URL, null,
                 Response.Listener { response ->
